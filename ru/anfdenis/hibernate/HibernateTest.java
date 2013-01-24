@@ -4,9 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
-import ru.anfdenis.dto.FourWheeler;
-import ru.anfdenis.dto.TwoWheeler;
-import ru.anfdenis.dto.Vehicle;
+import ru.anfdenis.dto.UserDetails;
 
 /**
  * Denis Anfertev
@@ -14,28 +12,34 @@ import ru.anfdenis.dto.Vehicle;
  */
 public class HibernateTest {
     public static void main(String[] args) {
-
-        Vehicle vehicle = new Vehicle();
-        vehicle.setVehicleName("Car");
-
-        TwoWheeler bike = new TwoWheeler();
-        bike.setVehicleName("Bike");
-        bike.setSteeringHandle("Bike Steering Handle");
-
-        FourWheeler car = new FourWheeler();
-        car.setVehicleName("Poursche");
-        car.setSteeringWheel("Poursche Steering Wheel");
-
         Configuration configuration = new Configuration().configure();
         ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();
-        session.save(vehicle);
-        session.save(bike);
-        session.save(car);
+        UserDetails user;
+        for (int i = 0; i < 10; i++) {
+            user = new UserDetails();
+            user.setUserName("User" + i);
+            session.save(user);
+        }
         session.getTransaction().commit();
         session.close();
+
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        user = (UserDetails) session.get(UserDetails.class, 6);
+        session.delete(user);
+
+        user = (UserDetails) session.get(UserDetails.class, 5);
+        user.setUserName("Updated User");
+        session.update(user);
+
+        session.getTransaction().commit();
+        session.close();
+
+        System.out.println("User name pulled up is " + user.getUserName());
     }
 }
