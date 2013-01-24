@@ -12,34 +12,23 @@ import ru.anfdenis.dto.UserDetails;
  */
 public class HibernateTest {
     public static void main(String[] args) {
+        UserDetails user = new UserDetails();
+        user.setUserName("Test User");
+
         Configuration configuration = new Configuration().configure();
         ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();
-        UserDetails user;
-        for (int i = 0; i < 10; i++) {
-            user = new UserDetails();
-            user.setUserName("User" + i);
-            session.save(user);
-        }
-        session.getTransaction().commit();
-        session.close();
+        session.save(user);
 
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-
-        user = (UserDetails) session.get(UserDetails.class, 6);
-        session.delete(user);
-
-        user = (UserDetails) session.get(UserDetails.class, 5);
         user.setUserName("Updated User");
-        session.update(user);
+        user.setUserName("Updated User Again");
 
         session.getTransaction().commit();
         session.close();
 
-        System.out.println("User name pulled up is " + user.getUserName());
+        user.setUserName("Updated User After Session Closed");
     }
 }
