@@ -1,5 +1,7 @@
 package ru.anfdenis.dto;
 
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
  * 21.01.13 15:26
  */
 @Entity
+@SelectBeforeUpdate
 public class UserDetails {
     @Id
     @GeneratedValue
