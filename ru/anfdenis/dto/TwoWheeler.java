@@ -1,6 +1,5 @@
 package ru.anfdenis.dto;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -8,7 +7,6 @@ import javax.persistence.Entity;
  * 23.01.13 16:59
  */
 @Entity
-@DiscriminatorValue("Bike")
 public class TwoWheeler extends Vehicle {
     private String SteeringHandle;
 
