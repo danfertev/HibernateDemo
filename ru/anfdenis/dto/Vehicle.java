@@ -11,7 +11,7 @@ import javax.persistence.InheritanceType;
  * 23.01.13 9:59
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Vehicle {
     @Id
     @GeneratedValue
